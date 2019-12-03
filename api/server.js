@@ -11,7 +11,7 @@ server.use('/api', apiRouter);
 
 
 server.get('/',(req,res) => {
-    res.send("<h1>webauth-i-guided</h1>")
+    res.send("<h1>Webauth-i-Guided</h1>")
   })
 
 module.exports = server;
