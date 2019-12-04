@@ -4,12 +4,11 @@ const router = require('express').Router();
 const Users = require('../users/users-model.js');
 
 router.post('/register', (req, res) => {
-  let credentials = req.body;
+  let user = req.body;
+  const hash = bcrypt.hashSync(user.password,10);
+  user.password = hash;
 
-  const hash = bcrypt.hashSync(credentials.password,8)
-  credentials.password = hash;
-
-  Users.add(credentials)
+  Users.add(user)
     .then(saved => {
       res.status(201).json(saved);
     })
@@ -24,10 +23,10 @@ router.post('/login', (req, res) => {
   Users.findBy({ username })
     .first()
     .then(user => {
-      if (user && bcrypt.compareSync(password,user.password)) {
+      if (user) {
         res.status(200).json({ message: `Welcome ${user.username}!` });
       } else {
-        res.status(401).json({ message: 'Invalid Credentials' });
+        res.status(401).json({ message: 'Invalid user' });
       }
     })
     .catch(error => {
